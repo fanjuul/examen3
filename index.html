@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adivina el Numero :D</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Adivina el Número</h1>
+<p>Intenta adivinar el número secreto entre 1 y 100. Tienes 10 intentos.</p>
+<p id="message"></p>
+<input type="number" id="guessInput">
+<button onclick="checkGuess()">Adivinar</button>
+<hr>
+<p>Intentos anteriores: <span id="guesses"></span></p>
+
+<script>
+    // Generar número aleatorio entre 1 y 100
+    const randomNumber = Math.floor(Math.random() * 100) + 1;
+    let guesses = [];
+    let attempts = 10;
+
+    function checkGuess() {
+    const guess = parseInt(document.getElementById('guessInput').value);
+    if (isNaN(guess) || guess < 1 || guess > 100) {
+        setMessage('Por favor ingresa un número válido entre 1 y 100.', 'red');
+        return;
+    }
+
+    guesses.push(guess);
+    document.getElementById('guessInput').value = '';
+
+    if (guess === randomNumber) {
+        setMessage(`¡Felicidades! ¡Adivinaste el número ${randomNumber} en ${10 - attempts + 1} intentos!`, 'green');
+        gameOver();
+    } else if (attempts === 1) {
+        setMessage(`¡Lo siento! Se acabaron los intentos. El número secreto era ${randomNumber}.`, 'red');
+        gameOver();
+    } else {
+        let message = `Incorrecto. Te quedan ${--attempts} intentos.`;
+        if (guess < randomNumber) {
+            message += ' El número es mayor.';
+        } else {
+            message += ' El número es menor.';
+        }
+        setMessage(message, 'red');
+    }
+
+        updateGuesses();
+    }
+
+    function setMessage(msg, color) {
+        document.getElementById('message').innerText = msg;
+        document.getElementById('message').style.color = color;
+    }
+
+    function updateGuesses() {
+        document.getElementById('guesses').innerText = guesses.join(', ');
+    }
+
+    function gameOver() {
+        document.getElementById('guessInput').disabled = true;
+        document.querySelector('button').disabled = true;
+    }
+</script>
+</body>
+</html>
